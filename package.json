@@ -4,9 +4,10 @@
   "private": true,
   "description": "ForceAim content marketing agency website",
   "scripts": {
+    "build": "node build.mjs",
     "start": "node server.mjs"
   },
   "engines": {
-    "node": ">=18"
+    "node": "24.x"
   }
 }

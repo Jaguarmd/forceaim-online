@@ -1,16 +1,18 @@
 # ForceAim website
 
-The site is a dependency-free static website served by a small Node.js server.
+The site is a dependency-free static website. Vercel builds it to `dist/` and serves those files directly; the local Node.js server is only for local development.
 
 ## Run locally
 
-Use Node.js 18 or newer, then run:
+Use Node.js 24.x, then run:
 
 ```sh
 npm start
 ```
 
-Open `http://127.0.0.1:4173`. Set `PORT` to use another local port.
+Open `http://127.0.0.1:4173`. Set `PORT` to use another local port. Set `SITE_DIR=dist` to preview the built output instead of the source files.
+
+To create the same static output used by Vercel, run `npm run build`. The generated site is in `dist/`.
 
 ## Configure before launch
 

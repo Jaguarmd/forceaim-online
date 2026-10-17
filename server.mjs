@@ -3,7 +3,8 @@ import { createServer } from "node:http";
 import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const root = resolve(fileURLToPath(new URL(".", import.meta.url)));
+const projectRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
+const root = resolve(projectRoot, process.env.SITE_DIR || ".");
 const port = Number(process.env.PORT || 4173);
 const types = {
   ".css": "text/css; charset=utf-8",
@@ -29,6 +30,7 @@ createServer((request, response) => {
     response.writeHead(400).end("Bad request");
     return;
   }
+  if (pathname === "/favicon.ico") pathname = "/favicon.svg";
 
   const requested = resolve(root, `.${pathname === "/" ? "/index.html" : pathname}`);
   if (requested !== root && !requested.startsWith(root + sep)) {
