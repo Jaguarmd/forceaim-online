@@ -1,3 +1,7 @@
 dist/
 node_modules/
 .vercel/
+.netlify/
+.env
+.env.*
+!.env.example

@@ -1,25 +1,30 @@
-# ForceAim website
+# ForceAim website and client platform
 
-The site is a dependency-free static website. Vercel builds it to `dist/` and serves those files directly; the local Node.js server is only for local development.
+The existing public website is built as static files in `dist/`. The agency workspace and client portal run through the Netlify Function in `netlify/functions/forceaim-api.mjs`; Supabase provides authentication, PostgreSQL, and private video storage.
 
-## Run locally
+## Local development
 
 Use Node.js 24.x, then run:
 
 ```sh
+npm install
 npm start
 ```
 
-Open `http://127.0.0.1:4173`. Set `PORT` to use another local port. Set `SITE_DIR=dist` to preview the built output instead of the source files.
+Open `http://127.0.0.1:4173`. Set `PORT` to use another local port. To build the static site, run `npm run build`; the output is in `dist/`.
 
-To create the same static output used by Vercel, run `npm run build`. The generated site is in `dist/`.
+## Netlify deployment
 
-## Configure before launch
+Keep the repository root as the Netlify base directory. `netlify.toml` configures the build command, `dist` publish directory, function directory, and rewrites to the API function. Configure the Supabase and optional Meta variables from `.env.example` in Netlify's environment-variable settings with function runtime access enabled. Never commit a populated `.env` file or expose the Supabase service-role key to browser code.
+
+Apply `supabase/migrations/202610170001_platform.sql` to the Supabase project before using the private workspace. See [`PLATFORM.md`](PLATFORM.md) for setup, first-admin instructions, client workflow, and integrations that still need external credentials.
+
+## Website content configuration
 
 Edit `config.js`:
 
-- `bookingUrl`: the real strategy-call scheduler URL. Leave empty until configured; booking buttons will explain that setup is needed.
-- `contactEmail`: a public business email address. Leave empty to omit the email link.
+- `bookingUrl`: the strategy-call scheduler URL.
+- `contactEmail`: the public business email address.
 - `interestListProvider`: reserved for a mailing-list integration. The current interest form stores an entered address only in that visitor's local browser and does not send it anywhere.
 
-The lead magnet and insight cards are clearly described as previews. Replace those sections when the resource and published content are ready. Review and complete the legal-page drafts with the business's actual details before launch.
+The lead magnet and insight cards remain previews until real resources are available. Review and complete the legal-page drafts with the business's actual details before launch.

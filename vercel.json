@@ -1,13 +1,16 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": null,
-  "installCommand": "",
-  "buildCommand": "node build.mjs",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "rewrites": [
-    {
-      "source": "/favicon.ico",
-      "destination": "/favicon.svg"
-    }
+  "functions": {
+    "api/index.mjs": { "maxDuration": 30 }
+  },
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/index.mjs?__fa_route=api/$1" },
+    { "src": "/(admin|portal|login|invite|reset)(/.*)?", "dest": "/api/index.mjs?__fa_route=$1$2" },
+    { "src": "/favicon.ico", "dest": "/favicon.svg" },
+    { "handle": "filesystem" }
   ]
 }

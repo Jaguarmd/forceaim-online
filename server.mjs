@@ -2,6 +2,7 @@ import { createReadStream, statSync } from "node:fs";
 import { createServer } from "node:http";
 import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
+import handler from "./api/index.mjs";
 
 const projectRoot = resolve(fileURLToPath(new URL(".", import.meta.url)));
 const root = resolve(projectRoot, process.env.SITE_DIR || ".");
@@ -17,7 +18,15 @@ const types = {
   ".xml": "application/xml; charset=utf-8"
 };
 
-createServer((request, response) => {
+createServer(async (request, response) => {
+  let route;
+  try { route = new URL(request.url || "/", "http://localhost").pathname; }
+  catch { response.writeHead(400).end("Bad request"); return; }
+  if (route.startsWith("/api/") || /^\/(admin|portal|login|invite|reset)(\/|$)/.test(route)) {
+    try { await handler(request, response); }
+    catch { if (!response.headersSent) response.writeHead(500, { "Content-Type": "text/plain; charset=utf-8" }); response.end("Request could not be completed"); }
+    return;
+  }
   if (!["GET", "HEAD"].includes(request.method || "GET")) {
     response.writeHead(405, { Allow: "GET, HEAD" }).end("Method not allowed");
     return;

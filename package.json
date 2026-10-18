@@ -5,7 +5,11 @@
   "description": "ForceAim content marketing agency website",
   "scripts": {
     "build": "node build.mjs",
-    "start": "node server.mjs"
+    "start": "node server.mjs",
+    "dev": "node server.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.57.0"
   },
   "engines": {
     "node": "24.x"
